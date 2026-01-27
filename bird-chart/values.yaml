@@ -1,0 +1,15 @@
+replicaCount: 2
+
+birdApi:
+  image: "bruno74t/bird-api:v.1.0.2"
+  replicas: 2
+  nodePort: 32493
+
+birdImageApi:
+  image: "bruno74t/bird-image-api:v.1.0.2"
+  replicas: 2
+  nodePort: 31708
+
+service:
+  type: NodePort
+  port: 80

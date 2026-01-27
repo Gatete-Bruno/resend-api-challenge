@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-bird-api
+  labels:
+    app: {{ .Release.Name }}-bird-api
+spec:
+  replicas: {{ .Values.birdApi.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-bird-api
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-bird-api
+    spec:
+      containers:
+        - name: bird-api
+          image: {{ .Values.birdApi.image }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 4201
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-bird-image-api
+  labels:
+    app: {{ .Release.Name }}-bird-image-api
+spec:
+  replicas: {{ .Values.birdImageApi.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-bird-image-api
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-bird-image-api
+    spec:
+      containers:
+        - name: bird-image-api
+          image: {{ .Values.birdImageApi.image }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 4200
