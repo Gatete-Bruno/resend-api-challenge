@@ -160,11 +160,11 @@ Here is the complete system design documentation on my technical blog:
 
 https://gatete.hashnode.dev/system-design-and-documentation-for-a-production-grade-api-infrastructure-deployed-on-aws
 
-- **Part 1: Architecture Overview & Technology Selection
-- **Part 2: Autoscaling & Resilience
-- **Part 3: Monitoring with CloudWatch
-- **Part 4: Cost Optimization
-- **Part 5: Multi-Region & Disaster Recovery
+- Part 1: Architecture Overview & Technology Selection
+- Part 2: Autoscaling & Resilience
+- Part 3: Monitoring with CloudWatch
+- Part 4: Cost Optimization
+- Part 5: Multi-Region & Disaster Recovery
 
 ## Tech Stack
 
