@@ -349,17 +349,6 @@ Test resilience:
 
 See detailed results: `RESILIENCE_TEST_RESULTS.md`
 
-## Cost
-
-**10-day deployment:** ~$34
-- EKS Control Plane: $24
-- EC2 nodes: $4.50
-- Load Balancers: $1.40
-- CloudFront: $2
-- Others: $2.10
-
-**Monthly cost:** ~$120-140
-
 ## Cleanup
 
 Destroy all infrastructure:
