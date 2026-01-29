@@ -14,6 +14,33 @@ View interactive diagram: [System Architecture on Mermaid](https://mermaid.live/
 - kubectl >= 1.29
 - AWS account with adminstrative access
 
+## Containerization & CI/CD
+
+Two microservices (Bird API and Bird Image API) are containerized and automatically built on every push to `main` branch via GitHub Actions.
+
+### Container Images
+```bash
+# Automatically pushed to Docker Hub
+docker pull {DOCKER_USERNAME}/bird-api:v.1.0.2
+docker pull {DOCKER_USERNAME}/bird-image-api:v.1.0.2
+```
+
+### GitHub Actions Workflow
+Trigger: Push or pull request to `main` branch
+
+**Pipeline:**
+- Code checkout and Docker Buildx setup
+- Docker Hub authentication
+- Build and push both API container images with version tags
+
+**GitHub Secrets Required:**
+```
+DOCKER_USERNAME: Docker Hub username
+DOCKER_PASSWORD_SYMBOLS_ALLOWED: Docker Hub credentials
+```
+
+EKS automatically pulls latest images during pod initialization.
+
 ### Deploy in 5 Steps
 ```bash
 cd infrastructure
@@ -63,32 +90,6 @@ watch kubectl get hpa -n default
 - Self-healing: pod/node failures recover automatically
 - Infrastructure as Code: 14 Terraform files
 
-## Containerization & CI/CD
-
-Two microservices (Bird API and Bird Image API) are containerized and automatically built on every push to `main` branch via GitHub Actions.
-
-### Container Images
-```bash
-# Automatically pushed to Docker Hub
-docker pull {DOCKER_USERNAME}/bird-api:v.1.0.2
-docker pull {DOCKER_USERNAME}/bird-image-api:v.1.0.2
-```
-
-### GitHub Actions Workflow
-Trigger: Push or pull request to `main` branch
-
-**Pipeline:**
-- Code checkout and Docker Buildx setup
-- Docker Hub authentication
-- Build and push both API container images with version tags
-
-**GitHub Secrets Required:**
-```
-DOCKER_USERNAME: Docker Hub username
-DOCKER_PASSWORD_SYMBOLS_ALLOWED: Docker Hub credentials
-```
-
-EKS automatically pulls latest images during pod initialization.
 
 ## Monitoring
 
