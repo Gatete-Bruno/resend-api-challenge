@@ -37,11 +37,11 @@ jobs:
       # Step 4: Build and push bird API image
       - name: Build and Push Bird API Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/bird-api:v.1.0.2 ./bird
-          docker push ${{ secrets.DOCKER_USERNAME }}/bird-api:v.1.0.2
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/bird-api:v1.0.3 ./bird
+          docker push ${{ secrets.DOCKER_USERNAME }}/bird-api:v1.0.3
 
       # Step 5: Build and push birdImage API image
       - name: Build and Push BirdImage API Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/bird-image-api:v.1.0.2 ./birdImage
-          docker push ${{ secrets.DOCKER_USERNAME }}/bird-image-api:v.1.0.2
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/bird-image-api:v1.0.3 ./birdImage
+          docker push ${{ secrets.DOCKER_USERNAME }}/bird-image-api:v1.0.3
