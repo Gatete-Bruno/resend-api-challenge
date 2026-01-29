@@ -117,25 +117,12 @@ Test resilience:
 ./failure-simulation.sh
 ```
 
-See results: `RESILIENCE_TEST_RESULTS.md`
-
-## Cost
-
-10-day deployment: ~$34
-- EKS Control Plane: $24
-- EC2 nodes: $4.50
-- Load Balancers: $1.40
-- CloudFront: $2
-- Others: $2.10
-
 ## Cleanup
 
 Destroy all infrastructure:
 ```bash
 terraform destroy
 ```
-
-Type `yes` to confirm. Costs stop immediately.
 
 ## Comprehensive Documentation
 
@@ -183,22 +170,6 @@ Read the complete system design documentation on my blog:
 - DR testing procedures
 - Cost-benefit analysis
 
-### Local Documentation
-
-For quick reference, also see:
-- `ARCHITECTURE.md` - System architecture diagram with component details
-- `RESILIENCE_TEST_RESULTS.md` - Failure simulation test results
-- Terraform files with inline documentation
-
-## Files
-
-- `*.tf` - Terraform Infrastructure as Code (14 files)
-- `terraform.tfvars` - Configuration values
-- `failure-simulation.sh` - Resilience test script
-- `ARCHITECTURE.md` - Detailed architecture documentation
-- `RESILIENCE_TEST_RESULTS.md` - Failure test results
-- `.gitignore` - Excludes sensitive files from Git
-
 ## Tech Stack
 
 - **Orchestration:** Kubernetes (AWS EKS)
@@ -207,14 +178,5 @@ For quick reference, also see:
 - **CDN:** AWS CloudFront
 - **Containerization:** Docker
 
-## Learning Resources
-
-This project demonstrates:
-- Production-grade Kubernetes deployment patterns
-- Infrastructure as Code best practices
-- Auto-scaling strategies for APIs
-- Resilience and failure recovery design
-- Cost optimization techniques
-- System design trade-offs and decision frameworks
 
 ---
