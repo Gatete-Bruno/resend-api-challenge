@@ -367,7 +367,7 @@ Type `yes` to confirm. Costs stop immediately.
 │   └── RESILIENCE_TEST_RESULTS.md (Failure test results)
 ├── .github/workflows/
 │   └── docker-ci.yml             (GitHub Actions pipeline)
-└── README.md                      (This file)
+└── README.md                     
 ```
 
 ## Tech Stack
