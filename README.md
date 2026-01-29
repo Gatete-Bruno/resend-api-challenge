@@ -33,6 +33,37 @@ Covers all five parts:
 - kubectl >= 1.29
 - AWS account with administrative access
 
+## Project Files
+```
+.
+├── bird/                         # Bird API microservice
+│   ├── Dockerfile
+│   ├── main.go
+│   ├── go.mod
+│   └── Makefile
+├── birdImage/                    # Bird Image API microservice
+│   ├── Dockerfile
+│   ├── main.go
+│   ├── go.mod
+│   └── Makefile
+├── bird-api-k8s-manifests/       # Kubernetes manifests (original)
+│   ├── bird-api-deployment.yaml
+│   └── bird-image-deployment.yaml
+├── bird-chart/                   # Helm chart
+│   ├── Chart.yaml
+│   └── templates/
+├── infrastructure/               # Terraform Infrastructure as Code
+│   ├── *.tf                      (14 Terraform files)
+│   ├── terraform.tfvars          (Configuration values)
+│   ├── failure-simulation.sh      (Resilience test script)
+│   ├── .gitignore                (Excludes state files)
+│   ├── ARCHITECTURE.md           (System architecture)
+│   └── RESILIENCE_TEST_RESULTS.md (Failure test results)
+├── .github/workflows/
+│   └── docker-ci.yml             (GitHub Actions pipeline)
+└── README.md                     
+```
+
 ### Deploy in 5 Steps
 ```bash
 cd infrastructure
@@ -339,36 +370,7 @@ terraform destroy
 
 Type `yes` to confirm. Costs stop immediately.
 
-## Project Files
-```
-.
-├── bird/                         # Bird API microservice
-│   ├── Dockerfile
-│   ├── main.go
-│   ├── go.mod
-│   └── Makefile
-├── birdImage/                    # Bird Image API microservice
-│   ├── Dockerfile
-│   ├── main.go
-│   ├── go.mod
-│   └── Makefile
-├── bird-api-k8s-manifests/       # Kubernetes manifests (original)
-│   ├── bird-api-deployment.yaml
-│   └── bird-image-deployment.yaml
-├── bird-chart/                   # Helm chart
-│   ├── Chart.yaml
-│   └── templates/
-├── infrastructure/               # Terraform Infrastructure as Code
-│   ├── *.tf                      (14 Terraform files)
-│   ├── terraform.tfvars          (Configuration values)
-│   ├── failure-simulation.sh      (Resilience test script)
-│   ├── .gitignore                (Excludes state files)
-│   ├── ARCHITECTURE.md           (System architecture)
-│   └── RESILIENCE_TEST_RESULTS.md (Failure test results)
-├── .github/workflows/
-│   └── docker-ci.yml             (GitHub Actions pipeline)
-└── README.md                     
-```
+
 
 ## Tech Stack
 
