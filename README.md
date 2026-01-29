@@ -156,45 +156,15 @@ This project includes extensive system design documentation covering architectur
 
 ### System Design Blog Series
 
-Read the complete system design documentation on my blog:
+Here is the complete system design documentation on my technical blog:
 
-#### [Part 1: Architecture Overview & Technology Selection](https://hashnode.com/draft/697a6f19a4825b20aaaffe85)
-- Why we chose EKS over alternatives
-- Load balancer comparison (NLB vs ALB vs Classic LB)
-- Container orchestration decision framework
-- Technology selection rationale
+https://gatete.hashnode.dev/system-design-and-documentation-for-a-production-grade-api-infrastructure-deployed-on-aws
 
-#### [Part 2: Autoscaling & Resilience](https://hashnode.com/draft/697a6f19a4825b20aaaffe85)
-- Horizontal Pod Autoscaling (HPA) explained
-- Why 70% CPU threshold?
-- Cluster Autoscaler configuration
-- Failure recovery mechanisms
-- Pod Disruption Budgets
-- Real-world resilience testing
-
-#### [Part 3: Monitoring with CloudWatch](https://hashnode.com/draft/697a6f19a4825b20aaaffe85)
-- Metrics selection strategy
-- CloudWatch vs Prometheus comparison
-- Four critical alarms explained
-- Log Insights queries
-- Alert fatigue prevention
-- Cost of monitoring
-
-#### [Part 4: Cost Optimization](https://hashnode.com/draft/697a6f19a4825b20aaaffe85)
-- Current cost breakdown ($120-140/month)
-- Spot instances strategy (70% savings)
-- ECS Fargate comparison
-- Reserved instances ROI
-- Break-even analysis
-- Cost optimization roadmap
-
-#### [Part 5: Multi-Region & Disaster Recovery](https://hashnode.com/draft/697a6f19a4825b20aaaffe85)
-- Multi-region architecture
-- Active-Active vs Active-Passive
-- RTO/RPO metrics
-- Database replication strategies
-- DR testing procedures
-- Cost-benefit analysis
+- **Part 1: Architecture Overview & Technology Selection
+- **Part 2: Autoscaling & Resilience
+- **Part 3: Monitoring with CloudWatch
+- **Part 4: Cost Optimization
+- **Part 5: Multi-Region & Disaster Recovery
 
 ## Tech Stack
 
