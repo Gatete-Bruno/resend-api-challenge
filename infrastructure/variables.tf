@@ -141,7 +141,7 @@ variable "enable_vpn_gateway" {
 variable "bird_api_image" {
   description = "Docker image URI for bird-api"
   type        = string
-  default     = "bruno74t/bird-api:v.1.0.1"
+  default     = "bruno74t/bird-api:v.1.0.2"
 }
 
 variable "bird_api_port" {
@@ -153,7 +153,7 @@ variable "bird_api_port" {
 variable "bird_image_api_image" {
   description = "Docker image URI for bird-image-api"
   type        = string
-  default     = "bruno74t/bird-image-api:v.1.0.1"
+  default     = "bruno74t/bird-image-api:v.1.0.2"
 }
 
 variable "bird_image_api_port" {
