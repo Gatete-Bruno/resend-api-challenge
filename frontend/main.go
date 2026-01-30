@@ -1,17 +1,10 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 )
-
-type Bird struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Image       string `json:"image"`
-}
 
 func main() {
 	// Serve static HTML
@@ -37,7 +30,6 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -47,7 +39,6 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
             align-items: center;
             padding: 20px;
         }
-
         .container {
             background: white;
             border-radius: 12px;
@@ -57,21 +48,14 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
             padding: 40px;
             text-align: center;
         }
-
         h1 {
             color: #333;
             margin-bottom: 30px;
             font-size: 2.5em;
         }
-
         .card {
             display: none;
         }
-
-        .card.active {
-            display: block;
-        }
-
         img {
             max-width: 100%;
             height: auto;
@@ -79,20 +63,17 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
             margin-bottom: 20px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
-
         h2 {
             color: #667eea;
             margin-bottom: 15px;
             font-size: 1.8em;
         }
-
         p {
             color: #666;
             font-size: 1.1em;
             line-height: 1.6;
             margin-bottom: 25px;
         }
-
         button {
             padding: 12px 30px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -103,22 +84,15 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
             font-size: 1em;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
-
-        button:active {
-            transform: translateY(0);
-        }
-
         .loading {
             display: none;
             color: #667eea;
             font-size: 1.2em;
         }
-
         .error {
             display: none;
             color: #e74c3c;
@@ -131,37 +105,30 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
 </head>
 <body>
     <div class="container">
-        <h1>🐦 Bird Viewer</h1>
-        
+        <h1>Bird Viewer</h1>
         <div id="loading" class="loading">
             <p>Loading bird data...</p>
         </div>
-
         <div id="error" class="error"></div>
-
         <div id="card" class="card">
             <img id="birdImage" src="" alt="Bird">
             <h2 id="birdName"></h2>
             <p id="birdDescription"></p>
         </div>
-
-        <button onclick="fetchBird()">Get Random Bird 🔄</button>
+        <button onclick="fetchBird()">Get Random Bird</button>
     </div>
-
     <script>
         function fetchBird() {
             const loadingEl = document.getElementById("loading");
             const errorEl = document.getElementById("error");
             const cardEl = document.getElementById("card");
-
             loadingEl.style.display = "block";
             errorEl.style.display = "none";
             cardEl.style.display = "none";
-
             fetch('/api/bird')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                        throw new Error('HTTP error! status: ' + response.status);
                     }
                     return response.json();
                 })
@@ -169,19 +136,16 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
                     document.getElementById("birdImage").src = data.image;
                     document.getElementById("birdName").textContent = data.name;
                     document.getElementById("birdDescription").textContent = data.description;
-
                     loadingEl.style.display = "none";
                     cardEl.style.display = "block";
                 })
                 .catch(error => {
                     console.error("Error fetching bird:", error);
-                    errorEl.textContent = `Error: ${error.message}`;
+                    errorEl.textContent = "Error: " + error.message;
                     loadingEl.style.display = "none";
                     errorEl.style.display = "block";
                 });
         }
-
-        // Load a bird when page loads
         window.addEventListener("load", fetchBird);
     </script>
 </body>
