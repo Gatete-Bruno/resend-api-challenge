@@ -141,7 +141,7 @@ variable "enable_vpn_gateway" {
 variable "bird_api_image" {
   description = "Docker image URI for bird-api"
   type        = string
-  default     = "bruno74t/bird-api:v.1.0.4"
+  default     = "bruno74t/bird-api:v.1.0.5"
 }
 
 variable "bird_api_port" {
@@ -153,13 +153,25 @@ variable "bird_api_port" {
 variable "bird_image_api_image" {
   description = "Docker image URI for bird-image-api"
   type        = string
-  default     = "bruno74t/bird-image-api:v.1.0.4"
+  default     = "bruno74t/bird-image-api:v.1.0.5"
 }
 
 variable "bird_image_api_port" {
   description = "Port for bird-image-api container"
   type        = number
   default     = 4200
+}
+
+variable "bird_frontend_image" {
+  description = "Docker image URI for bird-frontend"
+  type        = string
+  default     = "bruno74t/bird-frontend:v.1.0.5.5"
+}
+
+variable "bird_frontend_port" {
+  description = "Port for bird-frontend container"
+  type        = number
+  default     = 3000
 }
 
 # ============================================================================
@@ -182,6 +194,16 @@ variable "bird_image_api_replicas" {
   default     = 2
   validation {
     condition     = var.bird_image_api_replicas >= 2
+    error_message = "Must have at least 2 replicas for high availability."
+  }
+}
+
+variable "bird_frontend_replicas" {
+  description = "Number of replicas for bird-frontend deployment"
+  type        = number
+  default     = 2
+  validation {
+    condition     = var.bird_frontend_replicas >= 2
     error_message = "Must have at least 2 replicas for high availability."
   }
 }

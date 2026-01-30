@@ -40,6 +40,7 @@ enable_vpn_gateway = false
 
 bird_api_replicas = 2
 bird_image_api_replicas = 2
+bird_frontend_replicas = 2
 hpa_enabled = true
 hpa_min_replicas = 2
 hpa_max_replicas = 10

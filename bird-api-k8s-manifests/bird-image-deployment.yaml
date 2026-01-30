@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: bird-image-api
-        image: bruno74t/bird-image-api:v.1.0.1
+        image: bruno74t/bird-image-api:v.1.0.5
         ports:
         - containerPort: 4200
 ---

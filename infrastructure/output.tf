@@ -102,6 +102,16 @@ output "bird_image_api_service_endpoint" {
 }
 
 # ============================================================================
+# Frontend Service Endpoint
+# ============================================================================
+
+output "bird_frontend_service_endpoint" {
+  description = "Endpoint for bird-frontend service"
+  value       = try("http://${kubernetes_service.bird_frontend[0].status[0].load_balancer[0].ingress[0].hostname}", null)
+  depends_on  = [aws_eks_node_group.main]
+}
+
+# ============================================================================
 # Quick Start Guide
 # ============================================================================
 

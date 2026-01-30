@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: bird-frontend
-        image: bruno74t/bird-frontend:v.1.0.4
+        image: bruno74t/bird-frontend:v.1.0.5
         ports:
         - containerPort: 3000
 ---
