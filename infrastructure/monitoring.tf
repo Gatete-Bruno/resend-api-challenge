@@ -1,4 +1,31 @@
 # ============================================================================
+# SNS Topic for Alerts
+# ============================================================================
+
+resource "aws_sns_topic" "alerts" {
+  count = var.enable_cloudwatch_monitoring ? 1 : 0
+  name  = "${var.project_name}-alerts"
+
+  tags = merge(
+    var.common_tags,
+    {
+      Name = "${var.project_name}-alerts"
+    }
+  )
+}
+
+# ============================================================================
+# SNS Topic Subscription - Email
+# ============================================================================
+
+resource "aws_sns_topic_subscription" "alerts_email" {
+  count     = var.enable_cloudwatch_monitoring ? 1 : 0
+  topic_arn = aws_sns_topic.alerts[0].arn
+  protocol  = "email"
+  endpoint  = var.alert_email
+}
+
+# ============================================================================
 # CloudWatch Log Group for Application Logs
 # ============================================================================
 
@@ -39,6 +66,7 @@ resource "aws_cloudwatch_metric_alarm" "pod_cpu_high" {
   threshold           = "80"
   alarm_description   = "Alert when pod CPU utilization is above 80%"
   treat_missing_data  = "notBreaching"
+  alarm_actions       = [aws_sns_topic.alerts[0].arn]
 
   tags = merge(
     var.common_tags,
@@ -64,6 +92,7 @@ resource "aws_cloudwatch_metric_alarm" "pod_memory_high" {
   threshold           = "85"
   alarm_description   = "Alert when pod memory utilization is above 85%"
   treat_missing_data  = "notBreaching"
+  alarm_actions       = [aws_sns_topic.alerts[0].arn]
 
   tags = merge(
     var.common_tags,
@@ -89,6 +118,7 @@ resource "aws_cloudwatch_metric_alarm" "node_not_ready" {
   threshold           = "1"
   alarm_description   = "Alert when a node is not ready"
   treat_missing_data  = "notBreaching"
+  alarm_actions       = [aws_sns_topic.alerts[0].arn]
 
   tags = merge(
     var.common_tags,
@@ -114,6 +144,7 @@ resource "aws_cloudwatch_metric_alarm" "pod_restarts_high" {
   threshold           = "5"
   alarm_description   = "Alert when pods are restarting frequently"
   treat_missing_data  = "notBreaching"
+  alarm_actions       = [aws_sns_topic.alerts[0].arn]
 
   tags = merge(
     var.common_tags,
@@ -198,6 +229,11 @@ output "cloudwatch_dashboard_name" {
 output "cloudwatch_namespace" {
   description = "CloudWatch namespace for custom metrics"
   value       = local.cloudwatch_namespace
+}
+
+output "sns_topic_arn" {
+  description = "SNS topic ARN for alerts"
+  value       = try(aws_sns_topic.alerts[0].arn, null)
 }
 
 output "cloudwatch_alarms" {

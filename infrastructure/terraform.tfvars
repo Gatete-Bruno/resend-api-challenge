@@ -50,6 +50,8 @@ hpa_target_cpu_utilization = 70
 # Monitoring & Logging
 # ============================================================================
 
+alert_email = "brunogatete77@gmail.com"
+
 enable_cloudwatch_monitoring = true
 log_retention_in_days = 7
 enable_alb = true

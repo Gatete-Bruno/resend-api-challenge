@@ -8,7 +8,23 @@ resource "aws_cloudfront_distribution" "bird_api" {
   comment         = "CloudFront distribution for bird-api"
 
   # ============================================================================
-  # Origin 1: Bird API Load Balancer
+  # Origin 1: Bird Frontend Load Balancer
+  # ============================================================================
+
+  origin {
+    domain_name = kubernetes_service.bird_frontend[0].status[0].load_balancer[0].ingress[0].hostname
+    origin_id   = "bird-frontend-nlb"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+  }
+
+  # ============================================================================
+  # Origin 2: Bird API Load Balancer
   # ============================================================================
 
   origin {
@@ -24,7 +40,7 @@ resource "aws_cloudfront_distribution" "bird_api" {
   }
 
   # ============================================================================
-  # Origin 2: Bird Image API Load Balancer
+  # Origin 3: Bird Image API Load Balancer
   # ============================================================================
 
   origin {
@@ -40,10 +56,46 @@ resource "aws_cloudfront_distribution" "bird_api" {
   }
 
   # ============================================================================
-  # Default Cache Behavior (Bird API)
+  # Default Cache Behavior (Bird Frontend)
   # ============================================================================
 
   default_cache_behavior {
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "bird-frontend-nlb"
+
+    forwarded_values {
+      query_string = true
+
+      cookies {
+        forward = "all"
+      }
+
+      headers = [
+        "Accept",
+        "Accept-Charset",
+        "Accept-Encoding",
+        "Accept-Language",
+        "Authorization",
+        "Host",
+        "Origin",
+        "Referer",
+        "User-Agent"
+      ]
+    }
+
+    viewer_protocol_policy = "allow-all"
+    default_ttl            = 300
+    max_ttl                = 600
+    min_ttl                = 0
+  }
+
+  # ============================================================================
+  # Cache Behavior for Bird API
+  # ============================================================================
+
+  ordered_cache_behavior {
+    path_pattern     = "/api/*"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "bird-api-nlb"
@@ -69,8 +121,8 @@ resource "aws_cloudfront_distribution" "bird_api" {
     }
 
     viewer_protocol_policy = "allow-all"
-    default_ttl            = 300
-    max_ttl                = 600
+    default_ttl            = 0
+    max_ttl                = 300
     min_ttl                = 0
   }
 
@@ -111,6 +163,7 @@ resource "aws_cloudfront_distribution" "bird_api" {
 
   depends_on = [
     aws_s3_bucket_acl.cloudfront_logs,
+    kubernetes_service.bird_frontend,
     kubernetes_service.bird_api,
     kubernetes_service.bird_image_api
   ]
@@ -219,9 +272,14 @@ output "cloudfront_distribution_id" {
   value       = aws_cloudfront_distribution.bird_api.id
 }
 
-output "bird_api_cloudfront_url" {
-  description = "CloudFront URL for accessing bird-api"
+output "bird_frontend_cloudfront_url" {
+  description = "CloudFront URL for accessing bird-frontend"
   value       = "http://${aws_cloudfront_distribution.bird_api.domain_name}"
+}
+
+output "bird_api_cloudfront_url" {
+  description = "CloudFront URL for accessing bird-api via /api path"
+  value       = "http://${aws_cloudfront_distribution.bird_api.domain_name}/api"
 }
 
 output "cloudfront_logs_bucket" {
