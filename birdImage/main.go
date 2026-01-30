@@ -34,7 +34,7 @@ func defaultImage() string {
 
 func getBirdImage(birdName string) string {
 	var query = fmt.Sprintf(
-		"https://api.unsplash.com/search/photos?page=1&query=%s&client_id=P1p3WPuRfpi7BdnG8xOrGKrRSvU1Puxc1aueUWeQVAI&per_page=1",
+		"https://api.unsplash.com/search/photos?page=1&query=%s&client_id=P1p3WPuRfpi7BdnG8xOrGKrRSvU1Puxc1aueUWeQVAI&per_page=1&w=1920&h=1080",
 		url.QueryEscape(birdName),
 	)
 	res, err := http.Get(query)
@@ -60,8 +60,12 @@ func getBirdImage(birdName string) string {
 		return defaultImage()
 	}
 	
-	// Return high quality image (Regular size instead of Thumb)
-	return response.Results[0].Urls.Regular
+	// Return full resolution image (highest quality)
+	image := response.Results[0].Urls.Full
+	if image == "" {
+		image = response.Results[0].Urls.Regular
+	}
+	return image
 }
 
 func bird(w http.ResponseWriter, r *http.Request) {
