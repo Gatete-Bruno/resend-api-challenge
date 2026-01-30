@@ -7,10 +7,7 @@ import (
 )
 
 func main() {
-	// Serve static HTML
 	http.HandleFunc("/", serveHTML)
-	
-	// Proxy API requests to bird-api service
 	http.HandleFunc("/api/bird", getBird)
 
 	fmt.Println("Frontend listening on :3000")
@@ -23,108 +20,250 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bird API Viewer</title>
+    <title>Bird Explorer</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #000;
             min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
         }
-        .container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
+
+        #birdImage {
             width: 100%;
-            padding: 40px;
-            text-align: center;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
         }
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 2.5em;
+
+        .dark-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 2;
         }
-        .card {
-            display: none;
+
+        .header {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            z-index: 10;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
         }
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
         }
-        h2 {
+
+        .header p {
+            font-size: 1em;
+            opacity: 0.9;
+            margin: 5px 0 0 0;
+        }
+
+        .info-box {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 350px;
+            max-height: 50vh;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+        }
+
+        .info-box h2 {
             color: #667eea;
-            margin-bottom: 15px;
             font-size: 1.8em;
+            margin: 0;
+            word-wrap: break-word;
         }
-        p {
-            color: #666;
-            font-size: 1.1em;
-            line-height: 1.6;
-            margin-bottom: 25px;
+
+        .info-box p {
+            color: #555;
+            font-size: 0.9em;
+            line-height: 1.5;
+            flex-grow: 1;
         }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
         button {
-            padding: 12px 30px;
+            flex: 1;
+            padding: 10px 15px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1em;
-            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
+
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
         }
+
+        button:active {
+            transform: translateY(0);
+        }
+
         .loading {
-            display: none;
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 350px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            text-align: center;
             color: #667eea;
-            font-size: 1.2em;
-        }
-        .error {
             display: none;
-            color: #e74c3c;
+            z-index: 10;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 350px;
             background: #fadbd8;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            color: #c0392b;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border-left: 5px solid #c0392b;
+            font-weight: 600;
+            word-break: break-word;
+            display: none;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .info-box,
+            .loading,
+            .error {
+                width: 90vw;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .info-box h2 {
+                font-size: 1.5em;
+            }
+
+            .info-box p {
+                font-size: 0.85em;
+            }
+
+            .header {
+                top: 20px;
+                left: 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .header p {
+                font-size: 0.9em;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Bird Viewer</h1>
-        <div id="loading" class="loading">
-            <p>Loading bird data...</p>
+        <img id="birdImage" src="" alt="Bird" style="display: none;">
+        <div class="dark-overlay"></div>
+
+        <div class="header">
+            <h1>🐦 Bird Explorer</h1>
+            <p>Discover beautiful birds</p>
         </div>
+
+        <div id="loading" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Loading bird...</p>
+        </div>
+
         <div id="error" class="error"></div>
-        <div id="card" class="card">
-            <img id="birdImage" src="" alt="Bird">
+
+        <div id="info-box" class="info-box" style="display: none;">
             <h2 id="birdName"></h2>
             <p id="birdDescription"></p>
+            <div class="button-group">
+                <button onclick="fetchBird()">Get Next Bird →</button>
+            </div>
         </div>
-        <button onclick="fetchBird()">Get Random Bird</button>
     </div>
+
     <script>
         function fetchBird() {
-            const loadingEl = document.getElementById("loading");
-            const errorEl = document.getElementById("error");
-            const cardEl = document.getElementById("card");
-            loadingEl.style.display = "block";
-            errorEl.style.display = "none";
-            cardEl.style.display = "none";
+            const loading = document.getElementById("loading");
+            const error = document.getElementById("error");
+            const infoBox = document.getElementById("info-box");
+            const image = document.getElementById("birdImage");
+
+            loading.style.display = "block";
+            error.style.display = "none";
+            infoBox.style.display = "none";
+            image.style.display = "none";
+
             fetch('/api/bird')
                 .then(response => {
                     if (!response.ok) {
@@ -133,19 +272,31 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
                     return response.json();
                 })
                 .then(data => {
-                    document.getElementById("birdImage").src = data.image;
+                    image.src = data.image;
                     document.getElementById("birdName").textContent = data.name;
                     document.getElementById("birdDescription").textContent = data.description;
-                    loadingEl.style.display = "none";
-                    cardEl.style.display = "block";
+
+                    image.onload = function() {
+                        loading.style.display = "none";
+                        infoBox.style.display = "flex";
+                        image.style.display = "block";
+                    };
+
+                    image.onerror = function() {
+                        error.textContent = "Failed to load bird image. Try another one!";
+                        loading.style.display = "none";
+                        error.style.display = "block";
+                    };
                 })
                 .catch(error => {
-                    console.error("Error fetching bird:", error);
-                    errorEl.textContent = "Error: " + error.message;
-                    loadingEl.style.display = "none";
-                    errorEl.style.display = "block";
+                    console.error("Error:", error);
+                    error = document.getElementById("error");
+                    error.textContent = "Error: " + error.message;
+                    loading.style.display = "none";
+                    error.style.display = "block";
                 });
         }
+
         window.addEventListener("load", fetchBird);
     </script>
 </body>
@@ -156,7 +307,6 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
 }
 
 func getBird(w http.ResponseWriter, r *http.Request) {
-	// Call the bird-api service
 	resp, err := http.Get("http://bird-api-service:80/")
 	if err != nil {
 		http.Error(w, "Failed to fetch bird data", http.StatusInternalServerError)
