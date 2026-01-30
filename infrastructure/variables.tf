@@ -165,7 +165,7 @@ variable "bird_image_api_port" {
 variable "bird_frontend_image" {
   description = "Docker image URI for bird-frontend"
   type        = string
-  default     = "bruno74t/bird-frontend:v.1.0.5.8"
+  default     = "bruno74t/bird-frontend:v.1.0.5.9"
 }
 
 variable "bird_frontend_port" {
