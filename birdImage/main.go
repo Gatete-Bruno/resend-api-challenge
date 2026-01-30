@@ -10,15 +10,18 @@ import (
 )
 
 type Urls struct {
-	Thumb string
+	Thumb   string `json:"thumb"`
+	Small   string `json:"small"`
+	Regular string `json:"regular"`
+	Full    string `json:"full"`
 }
 
 type Links struct {
-	Urls Urls
+	Urls Urls `json:"urls"`
 }
 
 type ImageResponse struct {
-	Results []Links
+	Results []Links `json:"results"`
 }
 
 type Bird struct {
@@ -39,6 +42,8 @@ func getBirdImage(birdName string) string {
 		fmt.Printf("Error reading image API: %s\n", err)
 		return defaultImage()
 	}
+	defer res.Body.Close()
+	
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		fmt.Printf("Error parsing image API response: %s\n", err)
@@ -50,7 +55,13 @@ func getBirdImage(birdName string) string {
 		fmt.Printf("Error unmarshalling bird image: %s", err)
 		return defaultImage()
 	}
-	return response.Results[0].Urls.Thumb
+	
+	if len(response.Results) == 0 {
+		return defaultImage()
+	}
+	
+	// Return high quality image (Regular size instead of Thumb)
+	return response.Results[0].Urls.Regular
 }
 
 func bird(w http.ResponseWriter, r *http.Request) {
