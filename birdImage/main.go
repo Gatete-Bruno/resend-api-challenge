@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type Urls struct {
@@ -34,7 +35,7 @@ func defaultImage() string {
 
 func getBirdImage(birdName string) string {
 	var query = fmt.Sprintf(
-		"https://api.unsplash.com/search/photos?page=1&query=%s&client_id=P1p3WPuRfpi7BdnG8xOrGKrRSvU1Puxc1aueUWeQVAI&per_page=1&w=1920&h=1080",
+		"https://api.unsplash.com/search/photos?page=1&query=%s&client_id=P1p3WPuRfpi7BdnG8xOrGKrRSvU1Puxc1aueUWeQVAI&per_page=1",
 		url.QueryEscape(birdName),
 	)
 	res, err := http.Get(query)
@@ -60,12 +61,18 @@ func getBirdImage(birdName string) string {
 		return defaultImage()
 	}
 	
-	// Return full resolution image (highest quality)
-	image := response.Results[0].Urls.Full
-	if image == "" {
-		image = response.Results[0].Urls.Regular
+	// Get the full URL
+	baseImage := response.Results[0].Urls.Full
+	if baseImage == "" {
+		baseImage = response.Results[0].Urls.Regular
 	}
-	return image
+	
+	// Replace low quality params with high quality params
+	// Replace w=200 with w=2000 and q=80 with q=100
+	highQualityImage := strings.ReplaceAll(baseImage, "w=200", "w=2000")
+	highQualityImage = strings.ReplaceAll(highQualityImage, "q=80", "q=100")
+	
+	return highQualityImage
 }
 
 func bird(w http.ResponseWriter, r *http.Request) {
