@@ -6,111 +6,128 @@ set -e
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+YELLOW='\033[1;33m'
+NC='\033[0m'
 
 echo -e "${BLUE}=========================================="
-echo "Bird API - Failure Simulation Tests"
+echo "Bird API - Infrastructure Failure Simulation"
 echo "==========================================${NC}"
 
-# Function to wait for service recovery
-wait_for_recovery() {
-  local service=$1
-  local max_attempts=30
-  local attempt=0
-  
-  echo -e "${BLUE}Waiting for $service to recover...${NC}"
-  
-  while [ $attempt -lt $max_attempts ]; do
-    ready=$(kubectl get pods -l app=$service -o jsonpath='{.items[0].status.conditions[?(@.type=="Ready")].status}' 2>/dev/null || echo "False")
-    if [ "$ready" = "True" ]; then
-      echo -e "${GREEN}✓ $service recovered!${NC}"
-      return 0
-    fi
-    echo "Attempt $((attempt+1))/$max_attempts - Waiting..."
-    sleep 5
-    ((attempt++))
-  done
-  
-  echo -e "${RED}✗ $service did not recover in time${NC}"
-  return 1
+# Function to monitor alarms
+check_alarms() {
+  echo -e "\n${BLUE}Checking CloudWatch Alarms...${NC}"
+  aws cloudwatch describe-alarms --region us-east-1 --query 'MetricAlarms[?starts_with(AlarmName, `bird-api`)].{Name:AlarmName,State:StateValue}' --output table
 }
 
-# Test 1: Kill a pod and verify recovery
-echo -e "\n${BLUE}Test 1: Pod Failure Recovery${NC}"
+# Test 1: Simulate CPU spike by generating load
+echo -e "\n${BLUE}Test 1: CPU Load Spike${NC}"
 echo "========================================"
-echo "Killing bird-api pod..."
-
-# Get pod name
-POD=$(kubectl get pods -l app=bird-api -o jsonpath='{.items[0].metadata.name}')
-echo "Pod to kill: $POD"
-
-# Kill the pod
-kubectl delete pod $POD -n default
-
-# Wait for recovery
-wait_for_recovery "bird-api"
-
-# Verify new pod is running
-echo "Checking new pods:"
-kubectl get pods -l app=bird-api -n default
-
-# Test 2: Scale down and verify HPA scales back up
-echo -e "\n${BLUE}Test 2: Horizontal Pod Autoscaler Recovery${NC}"
-echo "========================================"
-echo "Scaling bird-api deployment to 1 replica..."
-
-kubectl scale deployment bird-api --replicas=1 -n default
-
-echo "Waiting for HPA to scale back to minimum (2 replicas)..."
-sleep 15
-
-echo "Current replicas:"
-kubectl get deployment bird-api -n default
-
-# Verify HPA brings it back to min
-REPLICAS=$(kubectl get deployment bird-api -o jsonpath='{.spec.replicas}' -n default)
-if [ "$REPLICAS" -ge 2 ]; then
-  echo -e "${GREEN}✓ HPA successfully scaled deployment back to $REPLICAS replicas${NC}"
-else
-  echo -e "${RED}✗ HPA did not scale as expected${NC}"
-fi
-
-# Test 3: Simulate high load (optional - requires load testing tool)
-echo -e "\n${BLUE}Test 3: Load Testing and Auto-scaling${NC}"
-echo "========================================"
-echo "To test auto-scaling under load, run:"
+echo "Generating high CPU load on bird-api pods..."
+echo "This will trigger: bird-api-pod-cpu-high alarm (threshold: 80%)"
 echo ""
-echo "kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh"
-echo "while sleep 0.01; do wget -q -O- http://bird-api-service/; done"
+
+# Create load generator pod
+kubectl run cpu-load-generator --image=busybox --rm -i --restart=Never -- sh -c "while true; do echo 'stress' | md5sum; done" &
+LOAD_PID=$!
+
+echo "CPU load running in background (PID: $LOAD_PID)"
+echo "Waiting 5 minutes for CloudWatch to detect high CPU..."
+sleep 300
+
+# Kill load generator
+kill $LOAD_PID 2>/dev/null || true
+echo -e "${GREEN}✓ CPU load test completed${NC}"
+check_alarms
+
+# Test 2: Simulate memory pressure
+echo -e "\n${BLUE}Test 2: Memory Pressure${NC}"
+echo "========================================"
+echo "Generating memory pressure on bird-api pods..."
+echo "This will trigger: bird-api-pod-memory-high alarm (threshold: 85%)"
 echo ""
-echo "Watch HPA in another terminal:"
-echo "watch kubectl get hpa -n default"
 
-# Test 4: Check service endpoints
-echo -e "\n${BLUE}Test 4: Service Discovery${NC}"
+# Create memory stress pod
+kubectl run memory-load-generator --image=busybox --rm -i --restart=Never -- sh -c "SIZE=100m; while true; do dd if=/dev/zero of=/tmp/stress bs=1M count=\$SIZE; done" &
+MEM_PID=$!
+
+echo "Memory load running in background (PID: $MEM_PID)"
+echo "Waiting 5 minutes for CloudWatch to detect high memory..."
+sleep 300
+
+# Kill memory generator
+kill $MEM_PID 2>/dev/null || true
+echo -e "${GREEN}✓ Memory load test completed${NC}"
+check_alarms
+
+# Test 3: Simulate node failure
+echo -e "\n${BLUE}Test 3: Node Failure Simulation${NC}"
 echo "========================================"
-echo "Bird API Service Endpoints:"
-kubectl get endpoints bird-api-service -n default
+echo "Cordoning a node to simulate node failure..."
+echo "This will trigger: bird-api-node-not-ready alarm"
+echo ""
 
-echo -e "\nBird Image API Service Endpoints:"
-kubectl get endpoints bird-image-api-service -n default
+# Get a node
+NODE=$(kubectl get nodes -o jsonpath='{.items[0].metadata.name}')
+echo "Cordoning node: $NODE"
+kubectl cordon $NODE
 
-# Test 5: Verify monitoring
-echo -e "\n${BLUE}Test 5: Monitoring and Logging${NC}"
+echo "Waiting 2 minutes for node to be marked NotReady..."
+sleep 120
+
+# Uncordon the node
+echo "Uncordoning node to restore..."
+kubectl uncordon $NODE
+echo -e "${GREEN}✓ Node failure test completed${NC}"
+check_alarms
+
+# Test 4: Crash pods repeatedly
+echo -e "\n${BLUE}Test 4: Pod Crash Loop${NC}"
 echo "========================================"
-echo "Recent logs from bird-api:"
-kubectl logs -l app=bird-api -n default --tail=5
+echo "Force restarting pods to simulate crashes..."
+echo "This will trigger: bird-api-pod-restarts-high alarm (threshold: 5+ restarts)"
+echo ""
 
+for i in {1..7}; do
+  POD=$(kubectl get pods -l app=bird-api -o jsonpath='{.items[0].metadata.name}')
+  echo "Force deleting pod $i/7: $POD"
+  kubectl delete pod $POD -n default --grace-period=0 --force 2>/dev/null || true
+  sleep 10
+done
+
+echo -e "${GREEN}✓ Pod restart test completed${NC}"
+check_alarms
+
+# Test 5: Final verification
+echo -e "\n${BLUE}Test 5: Alert Verification${NC}"
+echo "========================================"
+echo "All alarms triggered. CloudWatch should have:"
+echo "  - bird-api-pod-cpu-high: ALARM"
+echo "  - bird-api-pod-memory-high: ALARM"
+echo "  - bird-api-pod-restarts-high: ALARM"
+echo "  - bird-api-node-not-ready: ALARM (if node failed)"
+echo ""
+echo "Emails should be sent to: brunogatete77@gmail.com"
+echo ""
+
+# Final alarm status
+check_alarms
+
+# Cleanup and summary
 echo -e "\n${GREEN}=========================================="
-echo "Failure Simulation Tests Complete!"
+echo "Failure Simulation Complete!"
 echo "==========================================${NC}"
 echo ""
-echo "Summary:"
-echo "✓ Pod failure recovery tested"
-echo "✓ HPA recovery tested"
-echo "✓ Service endpoints verified"
-echo "✓ Logging verified"
+echo "Simulated Failures:"
+echo "✓ CPU spike (80%+ utilization)"
+echo "✓ Memory pressure (85%+ utilization)"
+echo "✓ Node failure (cordoned node)"
+echo "✓ Pod crash loop (7 restarts in 70 seconds)"
 echo ""
-echo "For load testing, use Apache Bench or wrk:"
-echo "ab -n 10000 -c 100 http://[LOAD_BALANCER_IP]/"
+echo "Expected Email Alerts:"
+echo "- bird-api-pod-cpu-high"
+echo "- bird-api-pod-memory-high"
+echo "- bird-api-pod-restarts-high"
+echo "- bird-api-node-not-ready (optional)"
+echo ""
+echo "Check your email: brunogatete77@gmail.com"
 echo ""

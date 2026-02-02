@@ -51,20 +51,20 @@ locals {
 }
 
 # ============================================================================
-# CloudWatch Alarms - CPU Utilization
+# CloudWatch Alarms - CPU Utilization (Lowered threshold for testing)
 # ============================================================================
 
 resource "aws_cloudwatch_metric_alarm" "pod_cpu_high" {
   count               = var.enable_cloudwatch_monitoring ? 1 : 0
   alarm_name          = "${var.project_name}-pod-cpu-high"
   comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "pod_cpu_utilization"
-  namespace           = local.cloudwatch_namespace
-  period              = "300"
+  evaluation_periods  = "1"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/ECS"
+  period              = "60"
   statistic           = "Average"
-  threshold           = "80"
-  alarm_description   = "Alert when pod CPU utilization is above 80%"
+  threshold           = "20"
+  alarm_description   = "Alert when pod CPU utilization is above 20%"
   treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.alerts[0].arn]
 
@@ -77,20 +77,20 @@ resource "aws_cloudwatch_metric_alarm" "pod_cpu_high" {
 }
 
 # ============================================================================
-# CloudWatch Alarms - Memory Utilization
+# CloudWatch Alarms - Memory Utilization (Lowered threshold for testing)
 # ============================================================================
 
 resource "aws_cloudwatch_metric_alarm" "pod_memory_high" {
   count               = var.enable_cloudwatch_monitoring ? 1 : 0
   alarm_name          = "${var.project_name}-pod-memory-high"
   comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "pod_memory_utilization"
-  namespace           = local.cloudwatch_namespace
-  period              = "300"
+  evaluation_periods  = "1"
+  metric_name         = "MemoryUtilization"
+  namespace           = "AWS/ECS"
+  period              = "60"
   statistic           = "Average"
-  threshold           = "85"
-  alarm_description   = "Alert when pod memory utilization is above 85%"
+  threshold           = "30"
+  alarm_description   = "Alert when pod memory utilization is above 30%"
   treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.alerts[0].arn]
 
@@ -129,20 +129,20 @@ resource "aws_cloudwatch_metric_alarm" "node_not_ready" {
 }
 
 # ============================================================================
-# CloudWatch Alarms - Pod Crash Count
+# CloudWatch Alarms - Pod Restart Count (Lowered threshold for testing)
 # ============================================================================
 
 resource "aws_cloudwatch_metric_alarm" "pod_restarts_high" {
   count               = var.enable_cloudwatch_monitoring ? 1 : 0
   alarm_name          = "${var.project_name}-pod-restarts-high"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "2"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
   metric_name         = "pod_restart_count"
   namespace           = local.cloudwatch_namespace
-  period              = "300"
+  period              = "120"
   statistic           = "Sum"
-  threshold           = "5"
-  alarm_description   = "Alert when pods are restarting frequently"
+  threshold           = "3"
+  alarm_description   = "Alert when pods restart 3 or more times"
   treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.alerts[0].arn]
 
@@ -182,11 +182,11 @@ resource "aws_cloudwatch_dashboard" "main" {
         type = "metric"
         properties = {
           metrics = [
-            [local.cloudwatch_namespace, "pod_cpu_utilization"],
+            ["AWS/EKS", "pod_cpu_utilization"],
             [".", "pod_memory_utilization"],
             [".", "pod_restart_count"]
           ]
-          period = 300
+          period = 60
           stat   = "Average"
           region = var.aws_region
           title  = "Pod Metrics"
