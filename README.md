@@ -1,12 +1,35 @@
 # Bird API - Highly Available Infrastructure on AWS
 
-Production-grade API infrastructure deployed on AWS EKS with auto-scaling, CloudFront CDN, and comprehensive monitoring.
+Production-grade API infrastructure deployed on AWS EKS with auto-scaling, CloudFront CDN, and comprehensive monitoring. Now includes a fullscreen bird image viewer frontend.
 
 ## System Architecture Visualization
 
-[System Architecture Diagram](https://mermaid.live/view#pako:eNqtWN1u2zYUfhVCxYYOsx2Jkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpCVDsCQPOd8PIc8P6Q-Gz4LqOEaC07WSzS5mMYIfkk2UxP96_FPUwNa1Pd9lsUpem7jHu7YPdztOPi7qfGzkihJeYN3IOVFLAsuOQMhmChxip93WeYZhEnKw1mWhiz-YcbPXgRWlLLb5S_M73bWfssXrHPB2oppKjnaaBXGaDIZIo_4S1pagsbBflCj48eRB-tDiyyzJf_OrE5FyYJ9lM2i0AcJ1UHjbAZaJOh5ljQpSdKmRRqo6M--qyCJ35tX14DwJk4pB2H0iqT0jmxqWd_1J8AK7Y4rqbCVLCxbWVadh7eAIXRXvZ3ytQu_fCtOHFrkwVZzFqFRRGIq93sW8qBJ1mHTj7IEjJCTb7OZNIcmyGrh81rQ6szewz4RYSh4IXrFWbZGzf02klowuT3Abwk9PYxS3FrRIMxWUh15mpZpte5PCo9YIGR31rgONq2HmPGOOVyRBd2JmLUilUN51PzZSfNnD5qPHzIfP2y-_RTzna8xvzTxWEwOL2CpISMBuiDgdH4YLyqrvBteiMODfy4q_DGh_Db0lZOOGE9Rz_zn9z9rDQNBXJIvrDqNYj4ps4x9EoHmIm9mKWvmw4oir0d9YIFWrncVxi5uoCty71qmnJkQvoAk4Y0-uKhrflPNn32ZP2UgIrFSAgvlMXmA1kYxOEvyJAuuWBymjAN-3gP90bdoyBaLOku8610mvyapv6zQQS6RB7tQPp5IHc_IXXJGb5Kzw2RSTJL1GtIsEcWgmqf6EeGrpLRoPidBYMvAdrpifNOQoZI00HuapITX5LwBSZYzRngAcEW_nO3YrXAMeldTwnLTxja6yPybvCwdFDVBP06duzLWjID4NM9KVR6X_-F0Y_DcFY3TimJju6JUoQBsNSdzxlfNRMBI4kfKE9hpcczfo5exzzdrsfPVzRqICB1sYrJig4tTuBHzb5TVStEhjI_9pjC16BzdPHZV8qBglgA-QLSKrf_3rz_-VgMVt6o8T0CVeegXEkerSH7UbL7Yvp5MRmeiGW_hOBXVu5QkeadAV2GikH_kIXg_ONKvGfjSVhRzxQ4dyf-eZSndygR1ioAPlRCMkn6Q8YBNVKfHGOwjHFzPhh9jcEo4oqYKvkMVDufwfg7v5uyauRKqwJKLX1G43vnJViS-goRPk-zTJOcESbUwlHSReMFMuMrUWrmX9_pHRlRJnoLsB4FKKBXYwkwR8VsZ90dG1hDsUwSnllDyTkVUGeiQLG5uZRNyNxWMiqJy-p7iKTftQ_UAv1aJtESBq_k6IpvtPlkergh5ptkS-y2CfStyhJqHjiKI-N8CWynO001ExfMCzcMocp_R3tyatxs-ixh3n1nEJm3cgAcBu6HuMxx0SY_kw-ZdGKRLF6_vD5HghZEj5cw50nw-L2BKqCdgLnWgiMDXACNu_xpghEcomJy5BsYMrDkOHtZGBo4mIKwDSMacHhxd-tiacBwtGy3qhx4cLfsjErMGGE8Pyi5E7aBNeub_jC2ZVDXgqKSrA6lI0TrAVHnRlKLHtiYgUVj0IKl7oAZvEt-R9KiUX2A1geUffPSg9T8RbUgzTUhDXa6QP9M1oeV3LF26pfoOsfj6-LVwqoU9uxlL4IDOSRalqIga0yxLWut7o2EseBgYbsoz2jBWlK-IGBqfBdrUSJfwnp0aLnQDwm-mxjT-AjJrEn9ibLUT4yxbLA13TqIERtk6gN0ZhATejXsWePBR7okv1obblgiG-9m4N1zbaTl21znvneN25_y87TSMjeFajtNq22anbXfMc8fsdpwvDeM3uabZ6nXbX_4DY4MPLw)
+[System Architecture Diagram](https://mermaid.live/view#pako:eNqtWN1u2zYUfhVCxYYOsx2Jkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpCJkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpCJkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpCJkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpCJkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpA)
 
 
+## Architecture Summary
+
+```
+Internet
+    ↓
+CloudFront CDN (d1ltovhjoc76pc.cloudfront.net)
+    ↓
+    ├─→ Bird Frontend (3000)
+    │   ↓
+    │   └─→ Bird API (4201)
+    │       ↓
+    │       └─→ Bird Image API (4200)
+    │
+    └─→ Direct API Routes (/api/*, /image/*)
+        ↓
+        Bird API & Image API Services
+
+Monitoring Layer:
+CloudWatch → SNS → Email Alerts (brunogatete77@gmail.com)
+
+Auto-Scaling:
+HPA: 2-10 pods per service (70% CPU trigger)
+CA:  2-5 nodes (resource-based scaling)
 
 ## Comprehensive Documentation
 
@@ -19,7 +42,7 @@ Here is the complete system design documentation on my technical blog:
 **[https://gatete.hashnode.dev/system-design-and-documentation-for-a-production-grade-api-infrastructure-deployed-on-aws](https://gatete.hashnode.dev/system-design-and-documentation-for-a-production-grade-api-infrastructure-deployed-on-aws)**
 
 Covers all five parts:
-- **Part 1:** Architecture Overview & Technology Selection
+- **Part 1:** Architecture Overview & Technology Stack
 - **Part 2:** Autoscaling & Resilience
 - **Part 3:** Monitoring with CloudWatch
 - **Part 4:** Cost Optimization
@@ -46,6 +69,9 @@ Covers all five parts:
 │   ├── main.go
 │   ├── go.mod
 │   └── Makefile
+├── frontend/                     # Bird Frontend service (NEW)
+│   ├── Dockerfile
+│   └── main.go
 ├── bird-api-k8s-manifests/       # Kubernetes manifests (original)
 │   ├── bird-api-deployment.yaml
 │   └── bird-image-deployment.yaml
@@ -53,14 +79,14 @@ Covers all five parts:
 │   ├── Chart.yaml
 │   └── templates/
 ├── infrastructure/               # Terraform Infrastructure as Code
-│   ├── *.tf                      (14 Terraform files)
+│   ├── *.tf                      (15 Terraform files)
 │   ├── terraform.tfvars          (Configuration values)
-│   ├── failure-simulation.sh      (Resilience test script)
+│   ├── failure-simulation.sh      (Resilience test script - UPDATED)
 │   ├── .gitignore                (Excludes state files)
 │   ├── ARCHITECTURE.md           (System architecture)
 │   └── RESILIENCE_TEST_RESULTS.md (Failure test results)
 ├── .github/workflows/
-│   └── docker-ci.yml             (GitHub Actions pipeline)
+│   └── docker-ci.yml             (GitHub Actions pipeline - UPDATED)
 └── README.md                     
 ```
 
@@ -77,13 +103,14 @@ Deployment takes ~20 minutes.
 
 ## Containerization & CI/CD
 
-Two microservices (Bird API and Bird Image API) are containerized and automatically built on every push to `main` branch via GitHub Actions.
+Three microservices (Bird API, Bird Image API, and Bird Frontend) are containerized and automatically built on every push to `main` branch via GitHub Actions.
 
 ### Container Images
 ```bash
 # Automatically pushed to Docker Hub
-docker pull bruno74t/bird-api:v.1.0.2
-docker pull bruno74t/bird-image-api:v.1.0.2
+docker pull bruno74t/bird-api:v.1.0.5.7
+docker pull bruno74t/bird-image-api:v.1.0.5.7
+docker pull bruno74t/bird-frontend:v.1.0.5.7
 ```
 
 ### GitHub Actions Workflow
@@ -91,7 +118,10 @@ docker pull bruno74t/bird-image-api:v.1.0.2
 - **Pipeline:**
   - Code checkout and Docker Buildx setup
   - Docker Hub authentication
-  - Build and push both API container images with version tags
+  - Build and push all three container images with version tags:
+    - bird-api
+    - bird-image-api
+    - bird-frontend (NEW)
 
 - **Secrets Required:**
   - `DOCKER_USERNAME`: Docker Hub username
@@ -101,36 +131,46 @@ EKS automatically pulls latest images during pod initialization.
 
 ## API Endpoints
 
-### Get Endpoints Dynamically
 
 Get your service endpoints programmatically (they change on each deployment):
 ```bash
+# Bird Frontend Service Endpoint (Load Balancer)
+kubectl get svc bird-frontend-service -n default -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+
 # Bird API Service Endpoint (Load Balancer)
 kubectl get svc bird-api-service -n default -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
 
 # Bird Image API Service Endpoint (Load Balancer)
 kubectl get svc bird-image-api-service -n default -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
 
-# CloudFront CDN URL
-terraform output bird_api_cloudfront_url
+# CloudFront CDN URL (Primary endpoint)
+terraform output bird_frontend_cloudfront_url
 ```
 
 ### Direct (No Cache)
 
 Replace with your actual endpoints from above:
+- **Bird Frontend:** `http://a9e7f3ea9637c478ca3859b22fa0dca2-889582477.us-east-1.elb.amazonaws.com`
 - **Bird API:** `http://a5d6bdfc70caf4284aa4829a6909552f-813628650.us-east-1.elb.amazonaws.com`
 - **Bird Image API:** `http://a447b3c1e2c634ba5b9efb1e1944f063-1813333208.us-east-1.elb.amazonaws.com`
 
 ### Via CloudFront CDN (Cached, Recommended)
-- **CDN URL:** `http://d1ltovhjoc76pc.cloudfront.net`
+- **Primary URL:** `http://d1ltovhjoc76pc.cloudfront.net`
+- Serves the Bird Frontend by default
+- Routes `/api/*` paths to Bird API
+- Routes `/image/*` paths to Bird Image API
+- 5-minute cache for faster response times
 
-### Test the API
+### Test the Services
 ```bash
-# Get CloudFront URL and test
-curl $(terraform output -raw bird_api_cloudfront_url)
+# Test Frontend (opens in browser)
+open $(terraform output -raw bird_frontend_cloudfront_url)
 
-# Or test with specific endpoint
-curl http://d1ltovhjoc76pc.cloudfront.net
+# Test Bird API directly
+curl http://d1ltovhjoc76pc.cloudfront.net/api
+
+# Test Bird Image API
+curl http://d1ltovhjoc76pc.cloudfront.net/image?birdName=Cardinal
 ```
 
 ## Verify Deployment
@@ -138,33 +178,46 @@ curl http://d1ltovhjoc76pc.cloudfront.net
 # Check nodes
 kubectl get nodes
 
-# Check pods
+# Check pods (should show 3 deployments with 2 replicas each)
 kubectl get pods -n default
 
-# Check services and get endpoints
+# Check services (should show 3 LoadBalancers)
 kubectl get svc -n default
 
-# Monitor HPA
+# Monitor HPA (shows auto-scaling status)
 watch kubectl get hpa -n default
 ```
 
-## Key Features
 
-- Multi-AZ deployment across 2 availability zones
-- Auto-scaling: HPA (2-10 pods) + Cluster Autoscaler (2-5 nodes)
-- CloudFront CDN with 5-minute caching
-- CloudWatch monitoring with 4 alarms
-- Self-healing: pod/node failures recover automatically (<15 seconds)
-- Infrastructure as Code: 14 Terraform files
-- Automated CI/CD with GitHub Actions
-- Docker containerization for both microservices
-
-## Monitoring
+## Monitoring & Alerting
 
 ### CloudWatch Dashboard
 ```
 https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards:name=bird-api-overview
 ```
+
+### Email Alerts
+
+CloudWatch alarms are configured to send email notifications to your registered email address:
+
+#### Alert Configuration
+```bash
+# Set your email in terraform.tfvars
+alert_email = "your-email@example.com"
+
+# Subscribe to SNS topic (confirm email from AWS)
+# Then alarms will trigger for:
+# - CPU utilization > 20%
+# - Memory utilization > 30%
+# - Pod restarts >= 3 times in 2 minutes
+# - Node not ready status
+```
+
+#### Alarm Topics
+- **pod-cpu-high:** Triggers when CPU exceeds 20%
+- **pod-memory-high:** Triggers when memory exceeds 30%
+- **pod-restarts-high:** Triggers on 3+ restarts in 2 minutes
+- **node-not-ready:** Triggers when a node fails
 
 ### Check Alarms
 ```bash
@@ -173,51 +226,156 @@ aws cloudwatch describe-alarms --region us-east-1
 
 ### View Logs
 ```bash
-# Pod logs
+# Frontend logs
+kubectl logs -f deployment/bird-frontend -n default
+
+# API logs
 kubectl logs -f deployment/bird-api -n default
+
+# Image API logs
+kubectl logs -f deployment/bird-image-api -n default
 
 # CloudWatch logs
 aws logs tail /aws/eks/bird-api-cluster/applications --follow
 ```
 
+## Failure Recovery & Testing
+
+The system automatically recovers from:
+- Pod crashes: <15 seconds
+- Node failures: <5 minutes
+- AZ failures: <2 minutes
+- High CPU/memory load: Auto-scales to handle demand
+
+### Automated Failure Simulation Script
+
+Test system resilience with the comprehensive failure simulation script:
+
+```bash
+cd infrastructure
+./failure-simulation.sh
+```
+
+### What the Script Tests
+
+The script runs four critical failure scenarios:
+
+1. **CPU Load Spike**
+   - Generates high CPU load on pods
+   - Tests CPU alarm triggering (threshold: 20%)
+   - Duration: 5 minutes
+   - Expected: Alert email sent, HPA scales pods
+
+2. **Memory Pressure**
+   - Creates memory-intensive workload
+   - Tests memory alarm triggering (threshold: 30%)
+   - Duration: 5 minutes
+   - Expected: Alert email sent, system remains stable
+
+3. **Node Failure Simulation**
+   - Cordons a node to simulate failure
+   - Tests node recovery mechanisms
+   - Duration: 2 minutes
+   - Expected: Pods migrate, node auto-recovered
+
+4. **Pod Restart Loop**
+   - Force-deletes 7 pods in rapid succession
+   - Tests pod restart alarm (threshold: 3+ restarts)
+   - Duration: 70 seconds
+   - Expected: Alert email sent, pods auto-recreated
+
+
+### Monitoring Test Results
+
+After the test completes:
+
+1. **Check Alarms**
+   ```bash
+   aws cloudwatch describe-alarms --region us-east-1 --query 'MetricAlarms[?starts_with(AlarmName, `bird-api`)].{Name:AlarmName,State:StateValue}'
+   ```
+
+2. **Verify Pod Recovery**
+   ```bash
+   kubectl get pods -n default
+   kubectl get deployment -n default
+   ```
+
+3. **Check Email**
+   - Look for alerts from AWS SNS
+   - Subject: "ALARM: bird-api-pod-cpu-high"
+   - Contains: Alarm details, thresholds, recovery actions
+
+4. **View CloudWatch Dashboard**
+   ```bash
+   # Open CloudWatch console to see metrics during test
+   https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards:name=bird-api-overview
+   ```
+
+
+
+1. **Confirm SNS Subscription**
+   ```bash
+   aws sns list-subscriptions-by-topic --topic-arn $(aws sns list-topics --query 'Topics[0].TopicArn' --output text)
+   ```
+
+2. **Check Alarm Thresholds** (in `infrastructure/monitoring.tf`)
+   - CPU: 20%
+   - Memory: 30%
+   - Restarts: 3+
+
+3. **Verify Metrics are Publishing**
+   ```bash
+   aws cloudwatch list-metrics --namespace BirdAPI --region us-east-1
+   ```
+
+4. **Check Pod Logs**
+   ```bash
+   kubectl logs -f deployment/bird-api -n default
+   ```
+
 ## Auto-Scaling
 
 ### Pod Auto-Scaling (HPA)
+
+Each service scales independently based on CPU utilization:
+
+#### Bird Frontend
 - Min: 2 replicas
 - Max: 10 replicas
-- Triggers at: 70% CPU utilization
-- Scales down after: 5 minutes below threshold
+- Trigger: 70% CPU utilization
+
+#### Bird API
+- Min: 2 replicas
+- Max: 10 replicas
+- Trigger: 70% CPU utilization
+
+#### Bird Image API
+- Min: 2 replicas
+- Max: 10 replicas
+- Trigger: 70% CPU utilization
 
 ### Node Auto-Scaling
-- Min: 2 nodes
+
+- Min: 2 nodes (high availability)
 - Max: 5 nodes
 - Automatically adds nodes when pods can't be scheduled
+- Automatically removes underutilized nodes
 
 Monitor:
 ```bash
+# Check HPA status
 kubectl get hpa -n default
-kubectl get nodes
+
+# Watch scaling in action
+watch kubectl get hpa,pods -n default
+
+# Check node utilization
+kubectl top nodes
+kubectl top pods -n default
 ```
 
 ## Container Images & Versions
 
-### Check Current Deployed Images
-```bash
-# View all container images currently deployed
-kubectl get deployments -o jsonpath='{.items[*].spec.template.spec.containers[*].image}'
-
-# Example output:
-# bruno74t/bird-api:v.1.0.2 bruno74t/bird-image-api:v.1.0.2
-
-# More readable format (one deployment per line)
-kubectl get deployments -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.spec.template.spec.containers[*].image}{"\n"}{end}'
-
-# Get just bird-api image
-kubectl get deployment bird-api -o jsonpath='{.spec.template.spec.containers[0].image}'
-
-# Get just bird-image-api image
-kubectl get deployment bird-image-api -o jsonpath='{.spec.template.spec.containers[0].image}'
-```
 
 ### Update Container Images
 
@@ -230,46 +388,44 @@ To update the container images deployed in your EKS cluster:
 cd infrastructure
 ```
 
-If you're not in the `infrastructure/` directory, you'll get:
-```
-Error: No configuration files
-```
-
 #### Update Image Versions
 
 Current deployed versions are defined in **`variables.tf`** with defaults:
 ```hcl
 variable "bird_api_image" {
-  default = "bruno74t/bird-api:v.1.0.2"
+  default = "bruno74t/bird-api:v.1.0.5.7"
 }
 
 variable "bird_image_api_image" {
-  default = "bruno74t/bird-image-api:v.1.0.2"
+  default = "bruno74t/bird-image-api:v.1.0.5.7"
+}
+
+variable "bird_frontend_image" {
+  default = "bruno74t/bird-frontend:v.1.0.5.7"
 }
 ```
 
-**Update `variables.tf`** (Alternative)
+**Update `variables.tf`** (Recommended)
 
 Edit `variables.tf` directly:
 ```hcl
 variable "bird_api_image" {
-  default = "bruno74t/bird-api:v.1.0.3"  # Change version
+  default = "bruno74t/bird-api:v.1.0.5.8"  # Change version
 }
 
 variable "bird_image_api_image" {
-  default = "bruno74t/bird-image-api:v.1.0.3"  # Change version
+  default = "bruno74t/bird-image-api:v.1.0.5.8"  # Change version
+}
+
+variable "bird_frontend_image" {
+  default = "bruno74t/bird-frontend:v.1.0.5.8"  # Change version
 }
 ```
-
 
 #### Review and Deploy Changes
 ```bash
 # Always review changes first
 terraform plan
-
-# You'll see:
-# kubernetes_deployment.bird_api will be updated in-place
-#  ~ image = "bruno74t/bird-api:v.1.0.2" -> "bruno74t/bird-api:v.1.0.3"
 
 # Deploy if changes look good
 terraform apply
@@ -277,12 +433,13 @@ terraform apply
 
 #### Monitor Rollout
 ```bash
-# Watch pods being replaced
+# Watch pods being replaced (all 3 services)
 kubectl get pods -n default -w
 
 # Check rollout status
 kubectl rollout status deployment/bird-api -n default
 kubectl rollout status deployment/bird-image-api -n default
+kubectl rollout status deployment/bird-frontend -n default
 
 # Verify new images are running
 kubectl get deployments -o jsonpath='{.items[*].spec.template.spec.containers[*].image}'
@@ -294,60 +451,23 @@ If the new version has issues:
 ```bash
 # Update back to previous version
 terraform apply \
-  -var bird_api_image=bruno74t/bird-api:v.1.0.2 \
-  -var bird_image_api_image=bruno74t/bird-image-api:v.1.0.2
+  -var bird_api_image=bruno74t/bird-api:v.1.0.5.7 \
+  -var bird_image_api_image=bruno74t/bird-image-api:v.1.0.5.7 \
+  -var bird_frontend_image=bruno74t/bird-frontend:v.1.0.5.7
 
 # Verify rollback
 kubectl rollout status deployment/bird-api -n default
+kubectl rollout status deployment/bird-image-api -n default
+kubectl rollout status deployment/bird-frontend -n default
 ```
 
-### Available Image Versions
-
-Check Docker Hub for available versions:
-- [bruno74t/bird-api tags](https://hub.docker.com/r/bruno74t/bird-api/tags)
-- [bruno74t/bird-image-api tags](https://hub.docker.com/r/bruno74t/bird-image-api/tags)
 
 Current versions:
-- `v.1.0.2` - Latest (currently deployed)
-- `v.1.0.1` - Previous
+- `v.1.0.5.7` - Latest (currently deployed)
+- `v.1.0.5` - Previous
 - `v.1.0.0` - Initial
-- `latest` - Points to v.1.0.2
+- `latest` - Points to v.1.0.5.7
 
-### Troubleshooting Image Updates
-
-**Error: "No configuration files"**
-```bash
-# Make sure you're in the infrastructure directory
-cd infrastructure
-terraform plan
-```
-
-**Pods not updating**
-```bash
-# Force pod restart
-kubectl rollout restart deployment/bird-api -n default
-kubectl rollout restart deployment/bird-image-api -n default
-```
-
-**Check image pull errors**
-```bash
-kubectl describe pod <pod-name> -n default
-kubectl logs <pod-name> -n default
-```
-
-## Failure Recovery
-
-The system automatically recovers from:
-- Pod crashes: <15 seconds
-- Node failures: <5 minutes
-- AZ failures: <2 minutes
-
-Test resilience:
-```bash
-./failure-simulation.sh
-```
-
-See detailed results: `RESILIENCE_TEST_RESULTS.md`
 
 ## Cleanup
 
@@ -359,17 +479,17 @@ terraform destroy
 
 Type `yes` to confirm. Costs stop immediately.
 
-
-
 ## Tech Stack
 
 - **Orchestration:** Kubernetes (AWS EKS)
 - **Infrastructure:** Terraform (Infrastructure as Code)
-- **Monitoring:** AWS CloudWatch
+- **Monitoring:** AWS CloudWatch + SNS
 - **CDN:** AWS CloudFront
+- **Load Balancing:** AWS ELB (Elastic Load Balancer)
 - **Containerization:** Docker
 - **CI/CD:** GitHub Actions
 - **Container Registry:** Docker Hub
 - **Application:** Go (Golang)
+- **Caching:** CloudFront (5-minute TTL)
 
-
+```
