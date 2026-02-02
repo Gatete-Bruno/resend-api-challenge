@@ -4,11 +4,9 @@ Production-grade API infrastructure deployed on AWS EKS with auto-scaling, Cloud
 
 ## System Architecture Visualization
 
-[System Architecture Diagram](https://mermaid.live/view#pako:eNqtWN1u2zYUfhVCxYYOsx2Jkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpCJkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpCJkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpCJkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpCJkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpA)
-
+[System Architecture Diagram](https://mermaid.live/view#pako:eNqtWN1u2zYUfhVCxYYOsx2Jkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpCJkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpCJkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpCJkn8iDAUcuWmLOp1Ruw3QeRe0RNtaZNGjpCRe3dvdby-wq73YnmCPsENSli1LTpA)
 
 ## Architecture Summary
-
 ```
 Internet
     ↓
@@ -30,6 +28,7 @@ CloudWatch → SNS → Email Alerts (brunogatete77@gmail.com)
 Auto-Scaling:
 HPA: 2-10 pods per service (70% CPU trigger)
 CA:  2-5 nodes (resource-based scaling)
+```
 
 ## Comprehensive Documentation
 
@@ -131,7 +130,6 @@ EKS automatically pulls latest images during pod initialization.
 
 ## API Endpoints
 
-
 Get your service endpoints programmatically (they change on each deployment):
 ```bash
 # Bird Frontend Service Endpoint (Load Balancer)
@@ -187,7 +185,6 @@ kubectl get svc -n default
 # Monitor HPA (shows auto-scaling status)
 watch kubectl get hpa -n default
 ```
-
 
 ## Monitoring & Alerting
 
@@ -250,7 +247,6 @@ The system automatically recovers from:
 ### Automated Failure Simulation Script
 
 Test system resilience with the comprehensive failure simulation script:
-
 ```bash
 cd infrastructure
 ./failure-simulation.sh
@@ -284,21 +280,20 @@ The script runs four critical failure scenarios:
    - Duration: 70 seconds
    - Expected: Alert email sent, pods auto-recreated
 
-
 ### Monitoring Test Results
 
 After the test completes:
 
 1. **Check Alarms**
-   ```bash
+```bash
    aws cloudwatch describe-alarms --region us-east-1 --query 'MetricAlarms[?starts_with(AlarmName, `bird-api`)].{Name:AlarmName,State:StateValue}'
-   ```
+```
 
 2. **Verify Pod Recovery**
-   ```bash
+```bash
    kubectl get pods -n default
    kubectl get deployment -n default
-   ```
+```
 
 3. **Check Email**
    - Look for alerts from AWS SNS
@@ -306,32 +301,10 @@ After the test completes:
    - Contains: Alarm details, thresholds, recovery actions
 
 4. **View CloudWatch Dashboard**
-   ```bash
+```bash
    # Open CloudWatch console to see metrics during test
    https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards:name=bird-api-overview
-   ```
-
-
-
-1. **Confirm SNS Subscription**
-   ```bash
-   aws sns list-subscriptions-by-topic --topic-arn $(aws sns list-topics --query 'Topics[0].TopicArn' --output text)
-   ```
-
-2. **Check Alarm Thresholds** (in `infrastructure/monitoring.tf`)
-   - CPU: 20%
-   - Memory: 30%
-   - Restarts: 3+
-
-3. **Verify Metrics are Publishing**
-   ```bash
-   aws cloudwatch list-metrics --namespace BirdAPI --region us-east-1
-   ```
-
-4. **Check Pod Logs**
-   ```bash
-   kubectl logs -f deployment/bird-api -n default
-   ```
+```
 
 ## Auto-Scaling
 
@@ -375,7 +348,6 @@ kubectl top pods -n default
 ```
 
 ## Container Images & Versions
-
 
 ### Update Container Images
 
@@ -461,13 +433,11 @@ kubectl rollout status deployment/bird-image-api -n default
 kubectl rollout status deployment/bird-frontend -n default
 ```
 
-
 Current versions:
 - `v.1.0.5.7` - Latest (currently deployed)
 - `v.1.0.5` - Previous
 - `v.1.0.0` - Initial
 - `latest` - Points to v.1.0.5.7
-
 
 ## Cleanup
 
@@ -491,5 +461,3 @@ Type `yes` to confirm. Costs stop immediately.
 - **Container Registry:** Docker Hub
 - **Application:** Go (Golang)
 - **Caching:** CloudFront (5-minute TTL)
-
-```
